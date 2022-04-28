@@ -11,6 +11,9 @@
 for each project one time
 ----------------------------------
 * 1 heroku create
+* 2 make sure your git is updated
+* 3 git push heroku main
+
 
 
 
