@@ -176,9 +176,7 @@ async function run() {
             const options = { upsert: true }
             const updateDoc = {
                 $set: {
-
-                    task: updateTaskData.task,
-
+                    task: updateTaskData.task
                 }
             };
 
