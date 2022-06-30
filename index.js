@@ -59,6 +59,8 @@ async function run() {
         await client.connect();
         const serviceCollection = client.db('geniusCar').collection('service');
         const orderCollection = client.db('geniusCar').collection('order')
+        const completeCollection = client.db('geniusCar').collection('complete');
+        const doneCollection = client.db('geniusCar').collection('done');
 
         // Auth  
         app.post('/login', async (req, res) => {
@@ -131,6 +133,57 @@ async function run() {
             const result = await orderCollection.insertOne(order)
             res.send(result)
 
+        })
+
+
+        // this part is for task management website.
+
+        app.get('/complete', async (req, res) => {
+
+            const query = {}
+            const cursor = completeCollection.find(query);
+            const complete = await cursor.toArray();
+            res.send(complete)
+        })
+
+        app.post('/complete', async (req, res) => {
+
+            const theTask = req.body;
+            const result = await completeCollection.insertOne(theTask);
+            res.send(result)
+        })
+
+        app.post('/done', async (req, res) => {
+
+            const theDeed = req.body;
+            const result = await doneCollection.insertOne(theDeed);
+            res.send(result)
+        })
+
+        app.get('/done', async (req, res) => {
+
+            const query = {}
+            const cursor = doneCollection.find(query);
+            const done = await cursor.toArray();
+            res.send(done)
+        })
+
+
+        app.put('/complete/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateTaskData = req.body
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: {
+
+                    task: updateTaskData.task,
+
+                }
+            };
+
+            const result = await completeCollection.updateOne(filter, updateDoc, options);
+            res.send(result)
         })
     }
     finally {
