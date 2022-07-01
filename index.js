@@ -176,12 +176,23 @@ async function run() {
             const options = { upsert: true }
             const updateDoc = {
                 $set: {
-                    task: updateTaskData.task
+
+                    task: updateTaskData.task,
+
                 }
             };
 
             const result = await completeCollection.updateOne(filter, updateDoc, options);
             res.send(result)
+        })
+
+
+        app.delete('/complete/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await completeCollection.deleteOne(query)
+            res.send(result);
+
         })
     }
     finally {
